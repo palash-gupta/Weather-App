@@ -1,9 +1,11 @@
 const API_Key = "30fc722d30d80db144b8d64205121ee8";
+
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         getWeather();
     }
 }
+
 function getWeather(){
     const location = document.getElementById('location').value;
     if (!location) {
@@ -46,21 +48,12 @@ function fetchAQI(lon,lat){
         .then(response => response.json())
         .then(data => {
 
-            let wordaqi;
-            if (data.list[0].main.aqi==1){
-                wordaqi="Good";
-            }else if (data.list[0].main.aqi==2){
-                wordaqi="Fair";
-            }else if (data.list[0].main.aqi==3){
-                wordaqi="Moderate";
-            }else if (data.list[0].main.aqi==4){
-                wordaqi="Poor";
-            }else if (data.list[0].main.aqi==5){
-                wordaqi="Very Poor";
-            }else{
-                alert('Error fetching AQI');
-            }
+            try {
+                let wordaqi = ["Good", "Fair", "Moderate", "Poor", "Very Poor"][data.list[0].main.aqi-1];
             displayAQI(wordaqi);
+            } catch (e) {
+                alert("Error fetching AQI");
+            }
         })
         .catch(error => {
             console.error('Error fetching data:', error);
